@@ -1,5 +1,6 @@
 FROM ubuntu:12.04
 
+ADD sources.list /etc/apt/
 RUN apt-get update
 RUN apt-get install -y wget git build-essential
 ADD zip /mnt
