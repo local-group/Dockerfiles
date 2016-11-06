@@ -21,13 +21,13 @@ def run(args):
     secret_key = os.getenv('QINIU_SK', args.secret_key)
     volumes = ' '.join([u'-v {}'.format(v) for v in args.volumes]) \
               if args.volumes else ''
+    rm = '' if args.no_rm else '--rm'
     image = args.image
-    cmd = 'docker run \
-    -e QINIU_BUCKET={bucket} \
-    -e QINIU_AK={access_key} \
-    -e QINIU_SK={secret_key} \
-    {volumes} \
-    -i -t {image}'.format(**locals())
+    cmd = ('docker run '
+           '-e QINIU_BUCKET={bucket} '
+           '-e QINIU_AK={access_key} '
+           '-e QINIU_SK={secret_key} '
+           '{volumes} {rm} -i -t {image}').format(**locals())
     print '[CMD]: {}'.format(cmd)
     os.system(cmd)
 
@@ -43,6 +43,7 @@ def parse_args():
     run_parser = subparsers.add_parser('run', help=run.__doc__)
     run_parser.set_defaults(func=run)
     run_parser.add_argument('-i', '--image', required=True, help='Docker image')
+    run_parser.add_argument('--no-rm', action='store_true', help='Docker auto remove container when exit')
     run_parser.add_argument('-v', '--volumes', nargs='*', help='Docker volumnes(DIR:DIR)')
     run_parser.add_argument('-b', '--bucket', help='Qiniu bucket name')
     run_parser.add_argument('-a', '--access-key', help='Qiniu access key')
