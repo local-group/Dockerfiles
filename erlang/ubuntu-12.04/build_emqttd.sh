@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /mnt
+
 if [ -d "emqttd-relx" ]; then
     cd emqttd-relx
     if [ -d ".git" ]; then
