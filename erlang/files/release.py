@@ -32,6 +32,9 @@ def upload(local_path, remote_name):
 
 
 def get_os_version():
+    if not os.path.exists('/etc/os-release'):
+        return 'centos', '6'
+
     os_id, os_version = None, None
     with open('/etc/os-release') as f:
         for line in f:
