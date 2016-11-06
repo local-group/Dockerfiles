@@ -7,8 +7,8 @@ RUN dpkg -i /tmp/erlang.deb || true
 RUN apt-get -f install -y
 RUN pip install qiniu
 
-ADD build_emqttd.sh /mnt
-ADD release.py /mnt
+ADD ./files/build_emqttd.sh /mnt
+ADD ./files/release.py /mnt
 
 # cleanup
 RUN apt-get clean\
