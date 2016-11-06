@@ -1,7 +1,8 @@
 FROM centos:6
 
 RUN yum update -y
-RUN yum install -y wget git zip python-pip build-essential
+RUN yum install -y wget git zip python-pip
+RUN yum groupinstall "Development Tools"
 RUN wget https://packages.erlang-solutions.com/erlang/esl-erlang/FLAVOUR_1_general/esl-erlang_18.3-1~centos~6_amd64.rpm -O /tmp/erlang.rpm
 RUN yum --nogpgcheck localinstall /tmp/erlang.rpm || true
 RUN pip install qiniu
