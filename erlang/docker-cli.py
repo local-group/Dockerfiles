@@ -19,6 +19,10 @@ def run(args):
     bucket = os.getenv('QINIU_BUCKET', args.bucket)
     access_key = os.getenv('QINIU_AK', args.access_key)
     secret_key = os.getenv('QINIU_SK', args.secret_key)
+    if not bucket or not access_key or not secret_key:
+        print u'[ERROR]: Qiniu settings missing: bucket={}, access_key={}, secret_key={}'.format(
+            bucket, access_key, secret_key)
+        exit(-1)
     volumes = ' '.join([u'-v {}'.format(v) for v in args.volumes]) \
               if args.volumes else ''
     rm = '' if args.no_rm else '--rm'
