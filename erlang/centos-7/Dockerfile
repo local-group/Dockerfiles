@@ -11,12 +11,12 @@ RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py
 RUN python /tmp/get-pip.py
 RUN pip install qiniu
 
-ADD ./files/build_emqttd.sh /mnt
-ADD ./files/release.py /mnt
-
 # cleanup
 RUN yum clean packages \
  && rm -rf /tmp/* /var/tmp/*
+
+ADD ./files/build_emqttd.sh /mnt
+ADD ./files/release.py /mnt
 
 VOLUME /mnt/emqttd-relx
 
