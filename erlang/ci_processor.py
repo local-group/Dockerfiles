@@ -85,17 +85,18 @@ def git_tag(payload):
     files = []
     for image, zip_file in zip_files.iteritems():
         if not zip_file:
-            files.append(u'* [FAIL]: image={}'.format(image))
+            files.append(u'* `FAIL`: image={}'.format(image))
         else:
             ret, _ = bucket_mgr.stat(args.bucket, zip_file)
             if 'hash' in ret:
-                files.append(u'* [SUCCESS]: {}'.format(make_cdn_link(zip_file)))
+                files.append(u'* `SUCCESS`: [{}]({})'.format(
+                    zip_file, make_cdn_link(zip_file)))
             else:
                 files.append(
-                    u'* [FAIL]: build or upload failed: image={}, filename={}'.format(
+                    u'* `FAIL`: build or upload failed: image={}, filename={}'.format(
                         image, zip_file))
     doc = (
-        u'### Build emqttd-relx@{tag}\n'
+        u'## Build emqttd-relx@{tag}\n'
         u'{files}'
     ).format(tag=args.tag, files='\n'.join(files))
     quip_cli.edit_document(QUIP_DOC_ID, doc, format='markdown')
