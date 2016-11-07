@@ -34,7 +34,6 @@ redis_cli = redis.StrictRedis()
 
 
 def verify_sign(hub_secret, sign, payload):
-    return True
     sign_our = hmac.new(hub_secret, payload, hashlib.sha1).hexdigest()
     return sign == 'sha1={}'.format(sign_our)
 

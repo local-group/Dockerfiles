@@ -17,12 +17,13 @@ def build(args):
 def run(args):
     """ Run a container """
     git_tag = os.getenv('GIT_TAG', args.tag)
+    domain = os.getenv('QINIU_DOMAIN', args.domain)
     bucket = os.getenv('QINIU_BUCKET', args.bucket)
     access_key = os.getenv('QINIU_AK', args.access_key)
     secret_key = os.getenv('QINIU_SK', args.secret_key)
-    if not bucket or not access_key or not secret_key:
-        print u'[ERROR]: Qiniu settings missing: bucket={}, access_key={}, secret_key={}'.format(
-            bucket, access_key, secret_key)
+    if not domain or not bucket or not access_key or not secret_key:
+        print u'[ERROR]: Qiniu settings missing: domain={}, bucket={}, access_key={}, secret_key={}'.format(
+            domain, bucket, access_key, secret_key)
         exit(-1)
     volumes = ' '.join([u'-v {}'.format(v) for v in args.volumes]) \
               if args.volumes else ''
@@ -30,6 +31,7 @@ def run(args):
     image = args.image
     cmd = ('docker run '
            '-e GIT_TAG={git_tag} '
+           '-e QINIU_DOMAIN={domain} '
            '-e QINIU_BUCKET={bucket} '
            '-e QINIU_AK={access_key} '
            '-e QINIU_SK={secret_key} '
@@ -52,6 +54,7 @@ def parse_args():
     run_parser.add_argument('--no-rm', action='store_true', help='Docker auto remove container when exit')
     run_parser.add_argument('-v', '--volumes', nargs='*', help='Docker volumnes(DIR:DIR)')
     run_parser.add_argument('-t', '--tag', help='Git tag')
+    run_parser.add_argument('-d', '--domain', help='Qiniu bucket domain')
     run_parser.add_argument('-b', '--bucket', help='Qiniu bucket name')
     run_parser.add_argument('-a', '--access-key', help='Qiniu access key')
     run_parser.add_argument('-s', '--secret-key', help='Qiniu secret key')

@@ -8,7 +8,9 @@ from argparse import Namespace
 
 import redis
 
-from ci_settings import TASK_QUEUE, QINIU_BUCKET, QINIU_AK, QINIU_SK, TARGET_IMAGES
+from ci_settings import TASK_QUEUE, TARGET_IMAGES, \
+    QINIU_DOMAIN, QINIU_BUCKET, QINIU_AK, QINIU_SK
+import docker_cli
 
 
 def get_stdout_logger(name, fd=sys.stdout, level=logging.DEBUG):
@@ -35,14 +37,24 @@ def git_push(payload):
 
 def git_tag(payload):
     args = Namespace()
+    args.volumes = []
+    args.no_rm = False
     args.tag = payload.get('ref')
+    args.domain = QINIU_DOMAIN
     args.bucket = QINIU_BUCKET
     args.access_key = QINIU_AK
     args.secret_key = QINIU_SK
+    if not args.domain or not args.bucket or not args.access_key or not args.secret_key:
+        raise ValueError(u'[ERROR]: Qiniu settings missing: domain={}, bucket={}, access_key={}, secret_key={}'.format(
+            domain, bucket, access_key, secret_key))
+
     for image in TARGET_IMAGES:
+        directory = '-'.join(image.split('-')[-1].split(':'))
         args.image = image
+        docker_cli.build(Namespace(directory=directory))
         logger.info(u'RUN {}'.format(args))
-        # docker_cli.run(args)
+        docker_cli.run(args)
+        logger.info(u'[build DONE]: image={}, tag={}'.format(args.image, args.tag))
 
 
 def main():
