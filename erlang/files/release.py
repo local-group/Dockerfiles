@@ -20,9 +20,10 @@ def upload(local_path, remote_name):
     access_key = os.getenv('QINIU_AK')
     secret_key = os.getenv('QINIU_SK')
     bucket_name = os.getenv('QINIU_BUCKET')
-    if not access_key or not secret_key or not bucket_name:
-        print u'[Error]: Qiniu config unset: QINIU_AK={}, QINIU_SK={}, QINIU_BUCKET={}'.format(
-            access_key, secret_key, bucket_name)
+    domain = os.getenv('QINIU_DOMAIN')
+    if not access_key or not secret_key or not bucket_name or not domain:
+        print u'[Error]: Qiniu config unset: QINIU_AK={}, QINIU_SK={}, QINIU_BUCKET={}, QINIU_DOMAIN={}'.format(
+            access_key, secret_key, bucket_name, domain)
         exit(-1)
 
     client = Auth(access_key, secret_key)

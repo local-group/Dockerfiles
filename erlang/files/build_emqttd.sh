@@ -1,20 +1,8 @@
 #!/bin/bash
 
 cd /mnt
-
-if [ -d "emqttd-relx" ]; then
-    cd emqttd-relx
-    if [ -d ".git" ]; then
-        git pull
-    else
-        git clone --depth 2 https://github.com/emqtt/emqttd-relx.git .
-    fi
-else
-    git clone --depth 2 https://github.com/emqtt/emqttd-relx.git
-    cd emqttd-relx
-fi
-make distclean
-make clean
+git clone --branch ${GIT_TAG} --depth 1 https://github.com/emqtt/emqttd-relx.git
+cd emqttd-relx
 make
 make rel
 python2 /mnt/release.py

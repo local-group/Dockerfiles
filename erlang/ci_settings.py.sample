@@ -1,0 +1,20 @@
+# coding: utf-8
+
+
+QINIU_DOMAIN = 'XXX.clouddn.com'
+QINIU_BUCKET = 'XXX'
+QINIU_AK = 'XXX'
+QINIU_SK = 'XXX'
+
+TASK_QUEUE = 'github:webhook:tasks'
+TARGET_IMAGES = [
+    'erlang-ubuntu:12.04',
+    'erlang-ubuntu:14.04',
+    'erlang-ubuntu:16.04',
+    'erlang-debian:7',
+    'erlang-debian:8',
+    'erlang-centos:7'
+]
+
+# Github webhook secret
+HUB_SECRET = "XXX"

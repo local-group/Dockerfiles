@@ -16,6 +16,7 @@ def build(args):
 
 def run(args):
     """ Run a container """
+    git_tag = os.getenv('GIT_TAG', args.tag)
     bucket = os.getenv('QINIU_BUCKET', args.bucket)
     access_key = os.getenv('QINIU_AK', args.access_key)
     secret_key = os.getenv('QINIU_SK', args.secret_key)
@@ -28,6 +29,7 @@ def run(args):
     rm = '' if args.no_rm else '--rm'
     image = args.image
     cmd = ('docker run '
+           '-e GIT_TAG={git_tag} '
            '-e QINIU_BUCKET={bucket} '
            '-e QINIU_AK={access_key} '
            '-e QINIU_SK={secret_key} '
@@ -49,6 +51,7 @@ def parse_args():
     run_parser.add_argument('-i', '--image', required=True, help='Docker image')
     run_parser.add_argument('--no-rm', action='store_true', help='Docker auto remove container when exit')
     run_parser.add_argument('-v', '--volumes', nargs='*', help='Docker volumnes(DIR:DIR)')
+    run_parser.add_argument('-t', '--tag', help='Git tag')
     run_parser.add_argument('-b', '--bucket', help='Qiniu bucket name')
     run_parser.add_argument('-a', '--access-key', help='Qiniu access key')
     run_parser.add_argument('-s', '--secret-key', help='Qiniu secret key')
@@ -63,5 +66,7 @@ def main():
     args.func(args)
     print 'DONE'
 
-main()
+
+if __name__ == '__main__':
+    main()
 
